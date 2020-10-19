@@ -1,0 +1,85 @@
+function question_1
+i = imread('slope.tif');
+B=bitget(i,1);
+figure,
+subplot(2,2,1);imshow(logical(B));title('Bit plane 1');
+B=bitget(i,2);
+subplot(2,2,2);imshow(logical(B));title('Bit plane 2');
+B=bitget(i,3);
+subplot(2,2,3);imshow(logical(B));title('Bit plane 3');
+B=bitget(i,4);
+subplot(2,2,4);imshow(logical(B));title('Bit plane 4');
+B=bitget(i,5);
+figure,
+subplot(2,2,1);imshow(logical(B));title('Bit plane 5');
+B=bitget(i,6);
+subplot(2,2,2);imshow(logical(B));title('Bit plane 6');
+B=bitget(i,7);
+subplot(2,2,3);imshow(logical(B));title('Bit plane 7');
+B=bitget(i,8);
+subplot(2,2,4);imshow(logical(B));title('Bit plane 8');
+
+A=imread('slope.tif');
+B=zeros(size(A));
+B=bitset(B,8,bitget(A,8));
+B=uint8(B);
+figure,
+subplot(2,2,1);imshow(B);title('Reconstructed plane 1');
+B=zeros(size(A));
+B=bitset(B,7,bitget(A,7));
+B=bitset(B,8,bitget(A,8));
+B=uint8(B);
+subplot(2,2,2);imshow(B);title('Reconstructed plane 2');
+B=zeros(size(A));
+B=bitset(B,6,bitget(A,6));
+B=bitset(B,7,bitget(A,7));
+B=bitset(B,8,bitget(A,8));
+B=uint8(B);
+subplot(2,2,3);imshow(B);title('Reconstructed plane 3');
+B=zeros(size(A));
+B=bitset(B,5,bitget(A,5));
+B=bitset(B,6,bitget(A,6));
+B=bitset(B,7,bitget(A,7));
+B=bitset(B,8,bitget(A,8));
+B=uint8(B);
+subplot(2,2,4);imshow(B);title('Reconstructed plane 4');
+B=zeros(size(A));
+B=bitset(B,4,bitget(A,4));
+B=bitset(B,5,bitget(A,5));
+B=bitset(B,6,bitget(A,6));
+B=bitset(B,7,bitget(A,7));
+B=bitset(B,8,bitget(A,8));
+B=uint8(B);
+figure,
+subplot(2,2,1);imshow(B);title('Reconstructed plane 5');
+B=zeros(size(A));
+B=bitset(B,3,bitget(A,3));
+B=bitset(B,4,bitget(A,4));
+B=bitset(B,5,bitget(A,5));
+B=bitset(B,6,bitget(A,6));
+B=bitset(B,7,bitget(A,7));
+B=bitset(B,8,bitget(A,8));
+B=uint8(B);
+subplot(2,2,2);imshow(B);title('Reconstructed plane 6');
+B=zeros(size(A));
+B=bitset(B,2,bitget(A,2));
+B=bitset(B,3,bitget(A,3));
+B=bitset(B,4,bitget(A,4));
+B=bitset(B,5,bitget(A,5));
+B=bitset(B,6,bitget(A,6));
+B=bitset(B,7,bitget(A,7));
+B=bitset(B,8,bitget(A,8));
+B=uint8(B);
+subplot(2,2,3);imshow(B);title('Reconstructed plane 7');
+B=zeros(size(A));
+B=bitset(B,1,bitget(A,1));
+B=bitset(B,2,bitget(A,2));
+B=bitset(B,3,bitget(A,3));
+B=bitset(B,4,bitget(A,4));
+B=bitset(B,5,bitget(A,5));
+B=bitset(B,6,bitget(A,6));
+B=bitset(B,7,bitget(A,7));
+B=bitset(B,8,bitget(A,8));
+B=uint8(B);
+subplot(2,2,4);imshow(B);title('Reconstructed plane 8');
+end
