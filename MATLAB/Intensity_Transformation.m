@@ -1,83 +1,76 @@
-% Power Gamma Intensity transformation 
-clc;
-close all
-itemp = imread('C:\Users\Abinaya Ravichandran\Desktop\Fall 2020\ECE613\Homework2\Q2\books.tif');   % read the image
-%r = uint8(255 * mat2gray(itemp));
-r = double(itemp)/255;    % normalise the image
-subplot(2,2,1),imshow(r),title('Normalised Image');
-c = 1;              % constant
-gamma = 0.5; % to make image dark take value of gamma > 1, to make image bright take vlue of gamma < 1
-s = c*(r).^gamma;   % formula to implement power law transformation
-subplot(2,2,2),imshow(uint8(itemp)),title('Original Image');
-subplot(2,2,3),imshow(s),title('Power Gamma Law Transformed Image');
+%% 
+% 2. Intensity Transformations: Gamma Mapping, Full-scale Contrast Stretch, 
+% and Histogram Equalization
+
+original_img = imread('books.tif'); 
+
+% Gamma Intensity transformation
+% normalizing the image
+norm_img = double(original_img)/255;    
+constant = 1;         
+gamma = 0.5; 
+
+% Power law transformation
+gamma_img = constant*(norm_img).^gamma;   
 
 % Full-contrast image
-i = itemp(:,:,1);
-rtemp = min(i);         % find the min. value of pixels in all the columns (row vector)
-rmin = min(rtemp);      % find the min. value of pixel in the image
-rtemp = max(i);         % find the max. value of pixels in all the columns (row vector)
-rmax = max(rtemp);      % find the max. value of pixel in the image
-m = 255/(rmax - rmin);  % find the slope of line joining point (0,255) to (rmin,rmax)
-c1 = 255 - m*rmax;       % find the intercept of the straight line with the axis
-i_new = m*i + c1;        % transform the image according to new slope
-%subplot(1,2,1),imshow(uint8(itemp)),title('Original Image');
-figure,subplot(1,2,1),imshow(i_new);title('Full contrast Image');   % display transformed image
+% min-max
+n = original_img(:,:,1);
+rmin = min(min(n));      % find the min. value of pixel in the image
+rmax = max(max(n));      % find the max. value of pixel in the image
+% finding slope and interception 
+full_contrast = (255/(rmax - rmin))*n + (255 - (255/(rmax - rmin))*rmax);     
 
 %Histogram Equalization
-x=imread('C:\Users\Abinaya Ravichandran\Desktop\Fall 2020\ECE613\Homework2\Q2\books.tif');
-h=zeros(1,256);
-[r, c]=size(x);
-totla_no_of_pixels=r*c;
-n=0:255; 
-%Calculating Histogram without built-in function
-for i=1:r
-    for j=1:c
-        h(x(i,j)+1)=h(x(i,j)+1)+1;
+new_img = imread('C:\Users\Abinaya Ravichandran\Desktop\Fall 2020\ECE613\Homework2\Q2\books.tif'); 
+hist_eq=zeros(1,256);
+[norm_img, constant] = size(new_img);
+pixel=norm_img*constant;
+
+%Calculating Histogram
+for n = 1 : norm_img
+    for m = 1 : constant
+        hist_eq(new_img(n,m)+1) = hist_eq(new_img(n,m)+1)+1;
     end
 end
-%%
+
 %Calculating Probability
-for i=1:256
-    h(i)=h(i)/totla_no_of_pixels;
+for n=1:norm_img
+    hist_eq(n)=hist_eq(n)/pixel;
 end
-%%
+
 %Calculating Cumulative Probability
-temp=h(1);
-for i=2:256
-    temp=temp+h(i);
-    h(i)=temp;
+temp = hist_eq(1);
+for n=2:norm_img
+    temp=temp+hist_eq(n);
+    hist_eq(n)=temp;
 end
-%%
-%Mapping
-for i=1:r
-    for j=1:c
-        x(i,j)=round(h(x(i,j)+1)*255);
+
+% Mapping
+for n=1:norm_img
+    for m=1:constant
+        new_img(n,m)=round(hist_eq(new_img(n,m)+1)*(norm_img-1));
     end
 end
-figure,subplot(1,2,2);imshow(x);title('Histogram Equalized image using own code');
-%subplot(1,2,2);imhist(x);title('Histogram Equalization using own code');
 
-%Ques 2b
-subplot(2,2,1)
-imshow(itemp);
-title('Original Image');
-subplot(2,2,2)
-imshow(s);
-title('Power Gamma Image');
-subplot(2,2,3)
-imshow(i_new);
-title('Full Constrast Image');
-subplot(2,2,4)
-imshow(x);
-title('Histogram Equalized Image');
+subplot(2,2,1); imshow(original_img); title('Original Image');
+subplot(2,2,2); imshow(gamma_img); title('Power Gamma Image');
+subplot(2,2,3); imshow(full_contrast); title('Full Constrast Image');
+subplot(2,2,4); imshow(new_img); title('Histogram Equalized Image');
 
-figure(2),
-subplot(2,2,1)
-imhist(itemp);
-subplot(2,2,2)
-imhist(s);
-subplot(2,2,3)
-imhist(i_new);
-subplot(2,2,4)
-imhist(x);
-
+figure(2), 
+subplot(2,2,1); histogram(original_img);  title('Histogram of Original Image');
+subplot(2,2,2), histogram(gamma_img);  title('Histogram of Power Gamma Image');
+subplot(2,2,3); histogram(full_contrast);title('Histogram of Full Constrast Image');
+subplot(2,2,4); histogram(new_img);title('Histogram of Histogram Equalized Image');
+%% 
+% Observations: 
+% 
+% Gamma intensity transformation on the original image have increased the brightness 
+% of the image but lacks contrast, also the histogram shows the pixels being shifted 
+% but do not help in equalizing. Full Constrast image have increased the brightness 
+% and sharpness of the original image, yet, black-point is not gained and the 
+% pixel values are not wide spread enough. Histogram equalizer have enchanced 
+% the image in means of bringtness, constrast, sharpness and also the histogram 
+% shows that the pixels are almost equally distributed among the frame. Histogram 
+% equalizer has efficiently transformed the original.
